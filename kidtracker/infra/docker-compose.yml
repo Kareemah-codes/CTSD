@@ -1,0 +1,33 @@
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: kidtracker-mqtt
+    ports:
+      - "1883:1883"   # MQTT
+      - "9001:9001"   # MQTT over WebSockets (handy for browser-side debugging later)
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_log:/mosquitto/log
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8
+    container_name: kidtracker-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: kidtracker
+      MYSQL_USER: kidtracker
+      MYSQL_PASSWORD: kidtrackerpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      # Day 2 will mount an init.sql here, e.g.:
+      # - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: unless-stopped
+
+volumes:
+  mosquitto_data:
+  mosquitto_log:
+  mysql_data:

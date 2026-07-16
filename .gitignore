@@ -1,0 +1,4 @@
+kidtracker/backend/node_modules/
+kidtracker/backend/.env
+ 
+esp32_firmware/build/
